@@ -10,6 +10,7 @@ builder.Services.AddScoped<LedgerService>();
 builder.Services.AddScoped<WalletBalanceService>();
 builder.Services.AddScoped<LedgerEntryValidator>();
 builder.Services.AddScoped<LedgerApplicationService>();
+builder.Services.AddScoped<LedgerDashboardService>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

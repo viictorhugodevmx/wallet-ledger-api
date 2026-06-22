@@ -1,8 +1,8 @@
 {
   "info": {
     "name": "wallet-ledger-api",
-    "_postman_id": "5e5a87aa-6f1f-42f8-9e30-000000000000",
-    "description": "Postman collection for Wallet Ledger API.",
+    "_postman_id": "5e5a87aa-6f1f-42f8-9e30-000000000009",
+    "description": "Complete Postman collection for Wallet Ledger API.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
@@ -17,12 +17,192 @@
           "path": ["api", "health"]
         }
       }
+    },
+    {
+      "name": "Wallets - Get all wallets",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/wallets",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "wallets"]
+        }
+      }
+    },
+    {
+      "name": "Wallets - Get wallet by number",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/wallets/WAL-1001",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "wallets", "WAL-1001"]
+        }
+      }
+    },
+    {
+      "name": "Wallets - Get wallet not found",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/wallets/WAL-9999",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "wallets", "WAL-9999"]
+        }
+      }
+    },
+    {
+      "name": "Ledger - Get wallet ledger",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/wallets/WAL-1001/ledger",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "wallets", "WAL-1001", "ledger"]
+        }
+      }
+    },
+    {
+      "name": "Ledger - Get wallet ledger not found",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/wallets/WAL-9999/ledger",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "wallets", "WAL-9999", "ledger"]
+        }
+      }
+    },
+    {
+      "name": "Ledger - Create credit entry",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"type\": 1,\n  \"amount\": 1000,\n  \"description\": \"Postman credit test\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/wallets/WAL-1001/ledger",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "wallets", "WAL-1001", "ledger"]
+        }
+      }
+    },
+    {
+      "name": "Ledger - Create debit entry",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"type\": 2,\n  \"amount\": 500,\n  \"description\": \"Postman debit test\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/wallets/WAL-1001/ledger",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "wallets", "WAL-1001", "ledger"]
+        }
+      }
+    },
+    {
+      "name": "Ledger - Create insufficient balance debit",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"type\": 2,\n  \"amount\": 999999,\n  \"description\": \"Insufficient balance test\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/wallets/WAL-1001/ledger",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "wallets", "WAL-1001", "ledger"]
+        }
+      }
+    },
+    {
+      "name": "Ledger - Create entry wallet not found",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"type\": 1,\n  \"amount\": 1000,\n  \"description\": \"Wallet not found test\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/wallets/WAL-9999/ledger",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "wallets", "WAL-9999", "ledger"]
+        }
+      }
+    },
+    {
+      "name": "Balance - Get wallet balance",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/wallets/WAL-1001/balance",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "wallets", "WAL-1001", "balance"]
+        }
+      }
+    },
+    {
+      "name": "Balance - Get wallet balance not found",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/wallets/WAL-9999/balance",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "wallets", "WAL-9999", "balance"]
+        }
+      }
+    },
+    {
+      "name": "Dashboard - Get ledger dashboard",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/ledger/dashboard",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "ledger", "dashboard"]
+        }
+      }
     }
   ],
   "variable": [
     {
       "key": "baseUrl",
-      "value": "http://localhost:5174"
+      "value": "http://localhost:5214"
     }
   ]
 }

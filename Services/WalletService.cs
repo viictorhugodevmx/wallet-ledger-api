@@ -36,6 +36,11 @@ public class WalletService
         }
     };
 
+    public List<Wallet> GetRawWallets()
+    {
+        return _wallets;
+    }
+
     public List<WalletResponseDto> GetWallets()
     {
         return _wallets.Select(MapToResponseDto).ToList();
@@ -43,9 +48,7 @@ public class WalletService
 
     public WalletResponseDto? GetWalletByNumber(string walletNumber)
     {
-        Wallet? wallet = _wallets.FirstOrDefault(wallet =>
-            wallet.WalletNumber.Equals(walletNumber.Trim(), StringComparison.OrdinalIgnoreCase)
-        );
+        Wallet? wallet = GetRawWalletByNumber(walletNumber);
 
         if (wallet is null)
         {

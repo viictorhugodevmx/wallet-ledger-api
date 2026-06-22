@@ -40,6 +40,11 @@ public class LedgerService
         }
     };
 
+    public List<LedgerEntry> GetRawEntries()
+    {
+        return _entries;
+    }
+
     public List<LedgerEntryResponseDto> GetEntriesByWalletNumber(string walletNumber)
     {
         return GetRawEntriesByWalletNumber(walletNumber)
