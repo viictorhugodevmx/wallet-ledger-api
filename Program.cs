@@ -6,6 +6,7 @@ builder.Services.AddControllers();
 
 builder.Services.AddScoped<WalletService>();
 builder.Services.AddScoped<LedgerService>();
+builder.Services.AddScoped<WalletBalanceService>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

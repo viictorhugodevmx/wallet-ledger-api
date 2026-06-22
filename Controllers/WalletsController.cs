@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using WalletLedgerApi.Dtos;
+using WalletLedgerApi.Models;
 using WalletLedgerApi.Services;
 
 namespace WalletLedgerApi.Controllers;
@@ -10,14 +11,17 @@ public class WalletsController : ControllerBase
 {
     private readonly WalletService _walletService;
     private readonly LedgerService _ledgerService;
+    private readonly WalletBalanceService _walletBalanceService;
 
     public WalletsController(
         WalletService walletService,
-        LedgerService ledgerService
+        LedgerService ledgerService,
+        WalletBalanceService walletBalanceService
     )
     {
         _walletService = walletService;
         _ledgerService = ledgerService;
+        _walletBalanceService = walletBalanceService;
     }
 
     [HttpGet]
@@ -71,6 +75,32 @@ public class WalletsController : ControllerBase
         return Ok(ApiResponse<List<LedgerEntryResponseDto>>.Ok(
             entries,
             "Ledger entries retrieved successfully."
+        ));
+    }
+
+    [HttpGet("{walletNumber}/balance")]
+    public ActionResult<ApiResponse<WalletBalanceResponseDto>> GetBalance(
+        string walletNumber
+    )
+    {
+        Wallet? wallet = _walletService.GetRawWalletByNumber(walletNumber);
+
+        if (wallet is null)
+        {
+            return NotFound(ApiResponse<WalletBalanceResponseDto>.Fail(
+                $"Wallet {walletNumber} was not found."
+            ));
+        }
+
+        List<LedgerEntry> entries =
+            _ledgerService.GetRawEntriesByWalletNumber(walletNumber);
+
+        WalletBalanceResponseDto balance =
+            _walletBalanceService.BuildBalance(wallet, entries);
+
+        return Ok(ApiResponse<WalletBalanceResponseDto>.Ok(
+            balance,
+            "Wallet balance calculated successfully."
         ));
     }
 }

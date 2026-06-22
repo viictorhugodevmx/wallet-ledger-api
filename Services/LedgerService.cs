@@ -42,14 +42,35 @@ public class LedgerService
 
     public List<LedgerEntryResponseDto> GetEntriesByWalletNumber(string walletNumber)
     {
+        return GetRawEntriesByWalletNumber(walletNumber)
+            .OrderByDescending(entry => entry.CreatedAtUtc)
+            .Select(MapToResponseDto)
+            .ToList();
+    }
+
+    public List<LedgerEntry> GetRawEntriesByWalletNumber(string walletNumber)
+    {
         return _entries
             .Where(entry => entry.WalletNumber.Equals(
                 walletNumber.Trim(),
                 StringComparison.OrdinalIgnoreCase
             ))
-            .OrderByDescending(entry => entry.CreatedAtUtc)
-            .Select(MapToResponseDto)
             .ToList();
+    }
+
+    public decimal CalculateBalance(string walletNumber)
+    {
+        List<LedgerEntry> entries = GetRawEntriesByWalletNumber(walletNumber);
+
+        decimal totalCredits = entries
+            .Where(entry => entry.Type == LedgerEntryType.Credit)
+            .Sum(entry => entry.Amount);
+
+        decimal totalDebits = entries
+            .Where(entry => entry.Type == LedgerEntryType.Debit)
+            .Sum(entry => entry.Amount);
+
+        return totalCredits - totalDebits;
     }
 
     private static LedgerEntryResponseDto MapToResponseDto(LedgerEntry entry)
