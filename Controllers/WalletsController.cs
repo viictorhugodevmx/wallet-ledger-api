@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using WalletLedgerApi.Dtos;
+using WalletLedgerApi.Helpers;
 using WalletLedgerApi.Models;
 using WalletLedgerApi.Services;
 
@@ -12,16 +13,19 @@ public class WalletsController : ControllerBase
     private readonly WalletService _walletService;
     private readonly LedgerService _ledgerService;
     private readonly WalletBalanceService _walletBalanceService;
+    private readonly LedgerApplicationService _ledgerApplicationService;
 
     public WalletsController(
         WalletService walletService,
         LedgerService ledgerService,
-        WalletBalanceService walletBalanceService
+        WalletBalanceService walletBalanceService,
+        LedgerApplicationService ledgerApplicationService
     )
     {
         _walletService = walletService;
         _ledgerService = ledgerService;
         _walletBalanceService = walletBalanceService;
+        _ledgerApplicationService = ledgerApplicationService;
     }
 
     [HttpGet]
@@ -76,6 +80,29 @@ public class WalletsController : ControllerBase
             entries,
             "Ledger entries retrieved successfully."
         ));
+    }
+
+    [HttpPost("{walletNumber}/ledger")]
+    public ActionResult<ApiResponse<LedgerEntryResponseDto>> CreateLedgerEntry(
+        string walletNumber,
+        [FromBody] CreateLedgerEntryRequestDto request
+    )
+    {
+        OperationResult<LedgerEntryResponseDto> result =
+            _ledgerApplicationService.CreateEntry(walletNumber, request);
+
+        if (!result.Success)
+        {
+            return ApiResponseHelper.FromFailedOperation(this, result);
+        }
+
+        return Created(
+            $"/api/wallets/{walletNumber}/ledger/{result.Data!.Id}",
+            ApiResponse<LedgerEntryResponseDto>.Ok(
+                result.Data,
+                result.Message
+            )
+        );
     }
 
     [HttpGet("{walletNumber}/balance")]

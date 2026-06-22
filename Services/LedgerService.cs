@@ -73,6 +73,27 @@ public class LedgerService
         return totalCredits - totalDebits;
     }
 
+    public LedgerEntryResponseDto CreateEntry(
+        Wallet wallet,
+        CreateLedgerEntryRequestDto request
+    )
+    {
+        LedgerEntry entry = new LedgerEntry
+        {
+            Id = Guid.NewGuid(),
+            WalletNumber = wallet.WalletNumber,
+            Type = request.Type,
+            Amount = request.Amount,
+            Currency = wallet.Currency,
+            Description = request.Description.Trim(),
+            CreatedAtUtc = DateTime.UtcNow
+        };
+
+        _entries.Add(entry);
+
+        return MapToResponseDto(entry);
+    }
+
     private static LedgerEntryResponseDto MapToResponseDto(LedgerEntry entry)
     {
         return new LedgerEntryResponseDto
